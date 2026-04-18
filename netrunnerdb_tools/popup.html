@@ -8,83 +8,105 @@
         body {
             width: 350px;
             background-color: #f8f9fa;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .container {
+            font-family: "Segoe UI", sans-serif;
+            margin: 0;
             padding: 15px;
         }
 
         h3 {
-            font-size: 1.4rem;
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 1.2rem;
             text-align: center;
-            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
         }
 
-        h4 {
-            font-size: 1rem;
-            color: #666;
-            border-left: 4px solid #007bff;
-            padding-left: 10px;
-            margin-top: 20px;
-            margin-bottom: 10px;
+        /* 收合標題樣式 */
+        .section-header {
+            cursor: pointer;
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            border: 1px solid #dee2e6;
+            transition: background 0.2s;
         }
 
+        .section-header:hover {
+            background: #dee2e6;
+        }
+
+        .section-header strong {
+            color: #495057;
+        }
+
+        /* 箭頭旋轉 */
+        .arrow {
+            transition: transform 0.3s ease;
+            color: #6c757d;
+        }
+
+        .section-header.collapsed .arrow {
+            transform: rotate(-90deg);
+        }
+
+        /* 收合容器：初始化 max-height 必須為 0 */
+        .collapsible-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            background: #fff;
+            border-left: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+        }
+
+        /* 列表樣式 */
         .column-list {
             list-style: none;
-            padding: 0;
-            margin-bottom: 0;
+            padding: 10px;
+            margin: 0;
         }
 
         .column-list li {
             background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            padding: 10px 12px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        .column-list li:hover {
-            border-color: #007bff;
-            background-color: #f0f7ff;
+        .column-list li.dragging {
+            opacity: 0.4;
+            border: 2px dashed #007bff;
         }
 
         .handle {
-            cursor: move;
-            margin-right: 12px;
+            cursor: grab;
+            margin-right: 10px;
             color: #adb5bd;
-            font-size: 1.2rem;
         }
 
         .visibility-toggle {
-            width: 18px;
-            height: 18px;
-            margin-right: 12px;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
-            accent-color: #007bff;
         }
 
         .item-label {
             flex-grow: 1;
-            font-weight: 500;
-            color: #495057;
-        }
-
-        .btn-group-xs>.btn {
-            padding: 2px 8px;
-            font-size: 12px;
-            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
         }
 
         .hidden-item {
             opacity: 0.5;
-            background: #f1f3f5 !important;
+            background: #f8f9fa !important;
         }
 
         .hidden-item .item-label {
@@ -92,55 +114,46 @@
             color: #adb5bd;
         }
 
+        .btn-group-xs>.btn {
+            padding: 1px 5px;
+            font-size: 11px;
+        }
+
         .save-section {
-            position: sticky;
-            bottom: 0;
-            background: #f8f9fa;
-            padding: 15px 0;
-            border-top: 1px solid #dee2e6;
-            margin-top: 10px;
+            margin-top: 20px;
+            padding-bottom: 10px;
         }
 
         #save-btn {
             font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
-        }
-
-        .column-list li.dragging {
-            opacity: 0.4;
-            border: 2px dashed #007bff;
-            background: #e7f1ff;
-        }
-
-        /* 確保拖拽時滑鼠指標正確 */
-        .handle {
-            cursor: grab;
-            margin-right: 10px;
-            color: #999;
-            user-select: none;
-        }
-
-        .handle:active {
-            cursor: grabbing;
+            width: 100%;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h3>欄位顯示與排序</h3>
+    <h3>欄位顯示與排序</h3>
 
-        <h4>Runner 側欄位</h4>
-        <ul id="runner-list" class="column-list"></ul>
-
-        <h4>Corp 側欄位</h4>
-        <ul id="corp-list" class="column-list"></ul>
-
-        <div class="save-section">
-            <button id="save-btn" class="btn btn-primary btn-block">儲存並刷新頁面</button>
-        </div>
+    <div class="section-header collapsed" id="runner-header">
+        <strong>Runner 側欄位</strong>
+        <span class="arrow">▼</span>
     </div>
+    <div class="collapsible-content" style="max-height: 0;">
+        <ul id="runner-list" class="column-list"></ul>
+    </div>
+
+    <div class="section-header collapsed" id="corp-header">
+        <strong>Corp 側欄位</strong>
+        <span class="arrow">▼</span>
+    </div>
+    <div class="collapsible-content" style="max-height: 0;">
+        <ul id="corp-list" class="column-list"></ul>
+    </div>
+
+    <div class="save-section">
+        <button id="save-btn" class="btn btn-primary">儲存設定並刷新頁面</button>
+    </div>
+
     <script src="popup.js"></script>
 </body>
 
