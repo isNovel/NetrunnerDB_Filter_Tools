@@ -1,0 +1,68 @@
+{
+    "$and": [
+        {
+            "$or": [
+                {
+                    "faction_code": [
+                        "anarch"
+                    ],
+                    "type_code": [
+                        "event"
+                    ],
+                    "pack_code": [
+                        "elev",
+                        "liberation",
+                        "rwr",
+                        "tai",
+                        "borealis",
+                        "ph",
+                        "ms",
+                        "msbp",
+                        "sg",
+                        "ashes",
+                        "ur",
+                        "urbp",
+                        "df"
+                    ]
+                },
+                {
+                    "$and": [
+                        {
+                            "faction_code": [
+                                "anarch"
+                            ],
+                            "type_code": [
+                                "event"
+                            ],
+                            "pack_code": [
+                                "elev",
+                                "liberation",
+                                "rwr",
+                                "tai",
+                                "borealis",
+                                "ph",
+                                "ms",
+                                "msbp",
+                                "sg",
+                                "ashes",
+                                "ur",
+                                "urbp",
+                                "df"
+                            ]
+                        },
+                        {
+                            "$or": [
+                                {
+                                    "keywords": {
+                                        "$in": [/AI/i
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
