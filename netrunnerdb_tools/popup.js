@@ -14,7 +14,7 @@ const DEFAULT_BTNS = {
 
 const DEFAULT_ORDER = {
     runner: ['indeck', 'title', 'cost', 'memory_cost', 'strength', 'faction_cost', 'type_code', 'faction_code'].map(id => ({ id, visible: true })),
-    corp: ['indeck', 'title', 'cost', 'trash_cost', 'faction_cost', 'type_code', 'faction_code'].map(id => ({ id, visible: true }))
+    corp: ['indeck', 'title', 'cost', 'trash_cost', 'strength', 'faction_cost', 'type_code', 'faction_code'].map(id => ({ id, visible: true }))
 };
 
 const DEFAULT_LANGUAGE = 'zh';
